@@ -3,6 +3,7 @@ import './style.css'
 import * as THREE from 'three'
 
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 const scene = new THREE.Scene()
 
@@ -18,16 +19,7 @@ camera.position.setZ(30)
 
 renderer.render(scene, camera)
 
-// add avatar //
-const novaTexture = new THREE.TextureLoader().load('img/seflPort2.png')
-const nova = new THREE.Mesh(
 
-   new THREE.BoxGeometry(5,5,5),
-   new THREE.MeshBasicMaterial({ map: novaTexture})
-  )
-
-
-scene.add(nova)
 
 // add light //
 function addLight() {
@@ -39,10 +31,10 @@ function addLight() {
   
   scene.add(pointLight, ambientLight)
   
-  const lightHelper = new THREE.PointLightHelper(pointLight)
-  const gridHelper = new THREE.GridHelper()
+  // const lightHelper = new THREE.PointLightHelper(pointLight)
+  // const gridHelper = new THREE.GridHelper()
   
-  scene.add(lightHelper, gridHelper)
+  // scene.add(lightHelper, gridHelper)
 }
 
 const controls = new OrbitControls(camera, renderer.domElement)
@@ -61,29 +53,45 @@ function addStar() {
 
 
 
-const spaceTexture  = new THREE.TextureLoader().load('img/space.jpg')
-scene.background = spaceTexture
+// const spaceTexture  = new THREE.TextureLoader().load('img/space.jpg')
+// scene.background = spaceTexture
 
-const starsArr = new Array(200).fill().forEach(addStar)
-function init() {
-  addLight()
-}
 
 function animate() {
   requestAnimationFrame(animate)
-
-  // for(let i = 0; i < starsArr.length; i++){
-  //   starsArr[i].x += 10
-  // }
   
-  nova.rotation.x += 0.01
-  nova.rotation.y += 0.005
-  nova.rotation.z += 0.01
+  // nova.rotation.x += 0.01
+  // nova.rotation.y += 0.005
+  // nova.rotation.z += 0.01
 
   controls.update()
 
   renderer.render( scene, camera)
 }
 
+// add avatar //
+
+// const novaTexture = new THREE.TextureLoader().load('img/seflPort2.png')
+// const nova = new THREE.Mesh(
+  
+//   new THREE.BoxGeometry(5,5,5),
+//   new THREE.MeshBasicMaterial({ map: novaTexture})
+//   )
+
+//   scene.add(nova)
+
+//load Model
+let loader = new GLTFLoader()
+loader.load('./3d/scene.gltf', function(gltf){
+  scene.add(gltf.scene)
+})
+
+
+  function init() {
+    addLight()
+    Array(200).fill().forEach(addStar)
+    animate()
+  }
+  
 init()
-animate()
+
