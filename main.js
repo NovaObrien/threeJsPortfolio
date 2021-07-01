@@ -3,7 +3,7 @@ import './style.css'
 import * as THREE from 'three'
 
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 const scene = new THREE.Scene()
 
@@ -40,11 +40,11 @@ function addLight() {
 const controls = new OrbitControls(camera, renderer.domElement)
 
 function addStar() {
-  const geometry = new THREE.BoxGeometry(3, 3, 3)
-  const material = new THREE.MeshStandardMaterial( { color: 0x6DF0DA})
+  const geometry = new THREE.SphereGeometry(.1, 100, 100)
+  const material = new THREE.MeshStandardMaterial( { color: 0xffffff})
   const star = new THREE.Mesh(geometry, material)
 
-  const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100))
+  const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(1000))
 
   star.position.set(x,y,z)
   scene.add(star)
@@ -53,16 +53,19 @@ function addStar() {
 
 
 
-// const spaceTexture  = new THREE.TextureLoader().load('img/space.jpg')
-// scene.background = spaceTexture
+const spaceTexture  = new THREE.TextureLoader().load('img/space.jpg')
+scene.background = spaceTexture
 
 
 function animate() {
   requestAnimationFrame(animate)
   
   // nova.rotation.x += 0.01
-  // nova.rotation.y += 0.005
+  nova.rotation.y += 0.005
   // nova.rotation.z += 0.01
+  nova.translateX (.5)
+  // nova.translateY (.1)
+  nova.translateZ (.5)
 
   controls.update()
 
@@ -71,25 +74,27 @@ function animate() {
 
 // add avatar //
 
-// const novaTexture = new THREE.TextureLoader().load('img/seflPort2.png')
-// const nova = new THREE.Mesh(
+const novaTexture = new THREE.TextureLoader().load('img/Mars_Map.png')
+const novaNormal = new THREE.TextureLoader().load('img/normal.png')
+const nova = new THREE.Mesh(
   
-//   new THREE.BoxGeometry(5,5,5),
-//   new THREE.MeshBasicMaterial({ map: novaTexture})
-//   )
+  new THREE.SphereGeometry(5,50,50),
+  new THREE.MeshBasicMaterial({ map: novaTexture}),
+  new THREE.MeshNormalMaterial({map: novaNormal})
+  )
 
-//   scene.add(nova)
+  scene.add(nova)
 
 //load Model
-let loader = new GLTFLoader()
-loader.load('./3d/scene.gltf', function(gltf){
-  scene.add(gltf.scene)
-})
+// let loader = new GLTFLoader()
+// loader.load('./3d/scene.gltf', function(gltf){
+//   scene.add(gltf.scene)
+// })
 
 
   function init() {
     addLight()
-    Array(200).fill().forEach(addStar)
+    Array(300).fill().forEach(addStar)
     animate()
   }
   
